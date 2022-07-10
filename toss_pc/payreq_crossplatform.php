@@ -1,8 +1,5 @@
 <?php
 
-//session_start();
-	//if(!$userid)	$userid = '_guest';
-	//$lg_userid = $userid;
     /*
      * [결제 인증요청 페이지(STEP2-1)]
      *
@@ -15,43 +12,44 @@
      * 기본정보를 변경하여 주시기 바랍니다.(파라미터 전달시 POST를 사용하세요)
      */
 
-	$CST_MID	= '상점아이디';                             //상점아이디(토스페이먼츠으로 부터 발급받으신 상점아이디를 입력하세요)
-	$CST_PLATFORM = 'service';                        //토스페이먼츠 결제 서비스 선택(test:테스트, service:서비스)
-	$LGD_BUYER = $_POST['oname'];                           //구매자명
-	$LGD_PRODUCTINFO  = '쇼핑몰';                    //상품명 																				
-																					//테스트 아이디는 't'를 반드시 제외하고 입력하세요.
-	$LGD_AMOUNT		= $_POST['amt'];                          //결제금액("," 를 제외한 결제금액을 입력하세요)
-	$LGD_BUYEREMAIL		= $_POST['oemail'];                      //구매자 이메일
-	$LGD_OID					= mktime();                             //주문번호(상점정의 유니크한 주문번호를 입력하세요)
+	$CST_MID	= '상점아이디';	       //상점아이디(토스페이먼츠으로 부터 발급받으신 상점아이디를 입력하세요)
+	$CST_PLATFORM = 'service';		   //토스페이먼츠 결제 서비스 선택(test:테스트, service:서비스)
+	$LGD_BUYER = $_POST['oname'];		   //구매자명
+	$LGD_PRODUCTINFO  = '쇼핑몰';	         //상품명 																				
+						   //테스트 아이디는 't'를 반드시 제외하고 입력하세요.
+	$LGD_AMOUNT = $_POST['amt'];               //결제금액("," 를 제외한 결제금액을 입력하세요)
+	$LGD_BUYEREMAIL	= $_POST['oemail'];        //구매자 이메일
+	$LGD_OID = mktime();                       //주문번호(상점정의 유니크한 주문번호를 입력하세요)
 	$LGD_TIMESTAMP = date('YmsHis');
-	if($pay_mode == '신용카드')			$LGD_CUSTOM_USABLEPAY = 'SC0010'; //디폴트 결제수단 (해당 필드를 보내지 않으면 결제수단 선택 UI 가 노출됩니다.)
-	elseif($pay_mode == '계좌이체')		$LGD_CUSTOM_USABLEPAY = 'SC0030';
-	elseif($pay_mode == '무통장입금') $LGD_CUSTOM_USABLEPAY = 'SC0040';
-	$LGD_WINDOW_TYPE = 'iframe';								  //결제창 호출방식 (수정불가)
-	$LGD_CUSTOM_SWITCHINGTYPE   = 'IFRAME';          //신용카드 카드사 인증 페이지 연동 방식 (수정불가)
-	$LGD_MID                    = (("test" == $CST_PLATFORM)?"t":"").$CST_MID;   //상점아이디(자동생성)	      	
-	$LGD_OSTYPE_CHECK		= "P"; //값 P: XPay 실행(PC 결제 모듈): PC용과 모바일용 모듈은 파라미터 및 프로세스가 다르므로 PC용은 PC 웹브라우저에서 실행 필요.	//"P", "M" 외의 문자(Null, "" 포함)는 모바일 또는 PC 여부를 체크하지 않음
-	$LGD_CUSTOM_SKIN	= "red";	//상점정의 결제창 스킨
-	$LGD_WINDOW_VER		        = "2.5";										//결제창 버젼정보
-	$LGD_CUSTOM_PROCESSTYPE     = "TWOTR"; 							//수정불가
+	if($pay_mode == '신용카드')		 $LGD_CUSTOM_USABLEPAY = 'SC0010'; //디폴트 결제수단 (해당 필드를 보내지 않으면 결제수단 선택 UI 가 노출됩니다.)
+	elseif($pay_mode == '계좌이체')	 $LGD_CUSTOM_USABLEPAY = 'SC0030';
+	elseif($pay_mode == '무통장입금')	$LGD_CUSTOM_USABLEPAY = 'SC0040';
+	$LGD_WINDOW_TYPE = 'iframe'; 			//결제창 호출방식 (수정불가)
+	$LGD_CUSTOM_SWITCHINGTYPE = 'IFRAME';           //신용카드 카드사 인증 페이지 연동 방식 (수정불가)
+	$LGD_MID = (("test" == $CST_PLATFORM)?"t":"").$CST_MID;   //상점아이디(자동생성)	      	
+	$LGD_OSTYPE_CHECK = "P"; //값 P: XPay 실행(PC 결제 모듈): PC용과 모바일용 모듈은 파라미터 및 프로세스가 다르므로 PC용은 PC 웹브라우저에서 실행 필요."P", "M" 외의 문자(Null, "" 포함)는 모바일 또는 PC 여부를 체크하지 않음
+	$LGD_CUSTOM_SKIN = "red";		//상점정의 결제창 스킨
+	$LGD_WINDOW_VER = "2.5";		//결제창 버젼정보
+	$LGD_CUSTOM_PROCESSTYPE = "TWOTR"; 	//수정불가
 
-	$LGD_BUYERID					=$_POST['LGD_BUYERID'];       //구매자 아이디
-	$LGD_BUYERIP					= $_POST["LGD_BUYERIP"];       //구매자IP
+	$LGD_BUYERID = $_POST['LGD_BUYERID'];   //구매자 아이디
+	$LGD_BUYERIP = $_POST["LGD_BUYERIP"];   //구매자IP
 	
-	//$LGD_ACTIVEXYN			= "N";								//계좌이체 결제시 사용, ActiveX 사용 여부로 "N" 이외의 값: ActiveX 환경에서 계좌이체 결제 진행(IE)
+	//$LGD_ACTIVEXYN = "N"; //계좌이체 결제시 사용, ActiveX 사용 여부로 "N" 이외의 값: ActiveX 환경에서 계좌이체 결제 진행(IE)
 
 	/*
-     * 가상계좌(무통장) 결제 연동을 하시는 경우 아래 LGD_CASNOTEURL 을 설정하여 주시기 바랍니다. 
-     */ 
+     	 * 가상계좌(무통장) 결제 연동을 하시는 경우 아래 LGD_CASNOTEURL 을 설정하여 주시기 바랍니다. 
+     	 */ 
 	 
-    $LGD_CASNOTEURL				= "https://".$_SERVER['HTTP_HOST']."/module/toss_pc/cas_noteurl.php";    
+    $LGD_CASNOTEURL = "https://".$_SERVER['HTTP_HOST']."/module/toss_pc/cas_noteurl.php";    
 
     /*
      * LGD_RETURNURL 을 설정하여 주시기 바랍니다. 반드시 현재 페이지와 동일한 프로트콜 및  호스트이어야 합니다. 아래 부분을 반드시 수정하십시요.
-     */    
-    $LGD_RETURNURL				= "https://".$_SERVER['HTTP_HOST']."/module/toss_pc/returnurl.php";
+     */
 
-    $configPath                 = "/home/leehyunjoo/www/module/toss_pc/lgdacom";	//토스페이먼츠에서 제공한 환경파일("/conf/lgdacom.conf") 위치 지정.     
+    $LGD_RETURNURL = "https://".$_SERVER['HTTP_HOST']."/module/toss_pc/returnurl.php";
+
+    $configPath = "/home/leehyunjoo/www/module/toss_pc/lgdacom"; //토스페이먼츠에서 제공한 환경파일("/conf/lgdacom.conf") 위치 지정.     
 
     /*
      *************************************************
@@ -63,11 +61,12 @@
 
     require_once("/home/leehyunjoo/www/module/toss_pc/lgdacom/XPayClient.php");
     $xpay = new XPayClient($configPath, $CST_PLATFORM);
-   	$xpay->Init_TX($LGD_MID);
-	$LGD_TIMESTAMP = $xpay->GetTimeStamp(); 
+    $xpay->Init_TX($LGD_MID);
+    $LGD_TIMESTAMP = $xpay->GetTimeStamp(); 
     $LGD_HASHDATA = $xpay->GetHashData($LGD_MID,$LGD_OID,$LGD_AMOUNT,$LGD_TIMESTAMP);
 	
-	//결제정보 임시저장 insert.php는 토스 화면이 나오면 바로 insert.php에 tmp DB가 추가된다
+
+    //결제정보 임시저장 insert.php는 토스 화면이 나오면 바로 insert.php에 tmp DB가 추가된다
 	include 'insert.php';
 
     /*
@@ -75,8 +74,6 @@
      * 2. MD5 해쉬암호화 (수정하지 마세요) - END
      *************************************************
      */
-
-    
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
