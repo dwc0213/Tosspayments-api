@@ -1,19 +1,19 @@
 <?php
 
     /*
-     * [ÃÖÁ¾°áÁ¦¿äÃ» ÆäÀÌÁö(STEP2-2)]
+     * [ìµœì¢…ê²°ì œìš”ì²­ íŽ˜ì´ì§€(STEP2-2)]
 	 *
-	 * ¸Å´º¾ó "5.1. XPay °áÁ¦ ¿äÃ» ÆäÀÌÁö °³¹ß"ÀÇ "´Ü°è 5. ÃÖÁ¾ °áÁ¦ ¿äÃ» ¹× ¿äÃ» °á°ú Ã³¸®" ÂüÁ¶
+	 * ë§¤ë‰´ì–¼ "5.1. XPay ê²°ì œ ìš”ì²­ íŽ˜ì´ì§€ ê°œë°œ"ì˜ "ë‹¨ê³„ 5. ìµœì¢… ê²°ì œ ìš”ì²­ ë° ìš”ì²­ ê²°ê³¼ ì²˜ë¦¬" ì°¸ì¡°
      *
-     * Åä½ºÆäÀÌ¸ÕÃ÷À¸·Î ºÎÅÍ ³»·Á¹ÞÀº LGD_PAYKEY(ÀÎÁõKey)¸¦ °¡Áö°í ÃÖÁ¾ °áÁ¦¿äÃ».(ÆÄ¶ó¹ÌÅÍ Àü´Þ½Ã POST¸¦ »ç¿ëÇÏ¼¼¿ä)
+     * í† ìŠ¤íŽ˜ì´ë¨¼ì¸ ìœ¼ë¡œ ë¶€í„° ë‚´ë ¤ë°›ì€ LGD_PAYKEY(ì¸ì¦Key)ë¥¼ ê°€ì§€ê³  ìµœì¢… ê²°ì œìš”ì²­.(íŒŒë¼ë¯¸í„° ì „ë‹¬ì‹œ POSTë¥¼ ì‚¬ìš©í•˜ì„¸ìš”)
      */
 
-	$configPath = "/home/leehyunjoo/www/module/toss_pc/lgdacom"; //Åä½ºÆäÀÌ¸ÕÃ÷¿¡¼­ Á¦°øÇÑ È¯°æÆÄÀÏ("/conf/lgdacom.conf,/conf/mall.conf") À§Ä¡ ÁöÁ¤. 
+	$configPath = "/home/leehyunjoo/www/module/toss_pc/lgdacom"; //í† ìŠ¤íŽ˜ì´ë¨¼ì¸ ì—ì„œ ì œê³µí•œ í™˜ê²½íŒŒì¼("/conf/lgdacom.conf,/conf/mall.conf") ìœ„ì¹˜ ì§€ì •. 
 
     /*
      *************************************************
-     * 1.ÃÖÁ¾°áÁ¦ ¿äÃ» - BEGIN
-     *  (´Ü, ÃÖÁ¾ ±Ý¾×Ã¼Å©¸¦ ¿øÇÏ½Ã´Â °æ¿ì ±Ý¾×Ã¼Å© ºÎºÐ ÁÖ¼®À» Á¦°Å ÇÏ½Ã¸é µË´Ï´Ù.)
+     * 1.ìµœì¢…ê²°ì œ ìš”ì²­ - BEGIN
+     *  (ë‹¨, ìµœì¢… ê¸ˆì•¡ì²´í¬ë¥¼ ì›í•˜ì‹œëŠ” ê²½ìš° ê¸ˆì•¡ì²´í¬ ë¶€ë¶„ ì£¼ì„ì„ ì œê±° í•˜ì‹œë©´ ë©ë‹ˆë‹¤.)
      *************************************************
      */
 
@@ -22,51 +22,51 @@
     $LGD_MID                    = $_POST["LGD_MID"];
     $LGD_PAYKEY                 = $_POST["LGD_PAYKEY"];
 
-    require_once("/home/leehyunjoo/www/module/toss_pc/lgdacom/XPayClient.php");
+    require_once("/home/www/module/toss_pc/lgdacom/XPayClient.php");
 
-	// (1) XpayClientÀÇ »ç¿ëÀ» À§ÇÑ xpay °´Ã¼ »ý¼º
-	// (2) Init: XPayClient ÃÊ±âÈ­(È¯°æ¼³Á¤ ÆÄÀÏ ·Îµå) 
-	// configPath: ¼³Á¤ÆÄÀÏ
-	// CST_PLATFORM: - test, service °ª¿¡ µû¶ó lgdacom.confÀÇ test_url(test) ¶Ç´Â url(srvice) »ç¿ë
-	//				- test, service °ª¿¡ µû¶ó Å×½ºÆ®¿ë ¶Ç´Â ¼­ºñ½º¿ë ¾ÆÀÌµð »ý¼º
+	// (1) XpayClientì˜ ì‚¬ìš©ì„ ìœ„í•œ xpay ê°ì²´ ìƒì„±
+	// (2) Init: XPayClient ì´ˆê¸°í™”(í™˜ê²½ì„¤ì • íŒŒì¼ ë¡œë“œ) 
+	// configPath: ì„¤ì •íŒŒì¼
+	// CST_PLATFORM: - test, service ê°’ì— ë”°ë¼ lgdacom.confì˜ test_url(test) ë˜ëŠ” url(srvice) ì‚¬ìš©
+	//				- test, service ê°’ì— ë”°ë¼ í…ŒìŠ¤íŠ¸ìš© ë˜ëŠ” ì„œë¹„ìŠ¤ìš© ì•„ì´ë”” ìƒì„±
     $xpay = new XPayClient($configPath, $CST_PLATFORM);
 	
-	// (3) Init_TX: ¸Þ¸ð¸®¿¡ mall.conf, lgdacom.conf ÇÒ´ç ¹× Æ®·£Àè¼ÇÀÇ °íÀ¯ÇÑ Å° TXID »ý¼º
+	// (3) Init_TX: ë©”ëª¨ë¦¬ì— mall.conf, lgdacom.conf í• ë‹¹ ë° íŠ¸ëžœìž­ì…˜ì˜ ê³ ìœ í•œ í‚¤ TXID ìƒì„±
 	$xpay->Init_TX($LGD_MID);    
     $xpay->Set("LGD_TXNAME", "PaymentByKey");
     $xpay->Set("LGD_PAYKEY", $LGD_PAYKEY);
     
-    //±Ý¾×À» Ã¼Å©ÇÏ½Ã±â ¿øÇÏ´Â °æ¿ì ¾Æ·¡ ÁÖ¼®À» Ç®¾î¼­ ÀÌ¿ëÇÏ½Ê½Ã¿ä.
-	//$DB_AMOUNT = "DB³ª ¼¼¼Ç¿¡¼­ °¡Á®¿Â ±Ý¾×"; //¹Ýµå½Ã À§º¯Á¶°¡ ºÒ°¡´ÉÇÑ °÷(DB³ª ¼¼¼Ç)¿¡¼­ ±Ý¾×À» °¡Á®¿À½Ê½Ã¿ä.
+    //ê¸ˆì•¡ì„ ì²´í¬í•˜ì‹œê¸° ì›í•˜ëŠ” ê²½ìš° ì•„ëž˜ ì£¼ì„ì„ í’€ì–´ì„œ ì´ìš©í•˜ì‹­ì‹œìš”.
+	//$DB_AMOUNT = "DBë‚˜ ì„¸ì…˜ì—ì„œ ê°€ì ¸ì˜¨ ê¸ˆì•¡"; //ë°˜ë“œì‹œ ìœ„ë³€ì¡°ê°€ ë¶ˆê°€ëŠ¥í•œ ê³³(DBë‚˜ ì„¸ì…˜)ì—ì„œ ê¸ˆì•¡ì„ ê°€ì ¸ì˜¤ì‹­ì‹œìš”.
 	//$xpay->Set("LGD_AMOUNTCHECKYN", "Y");
 	//$xpay->Set("LGD_AMOUNT", $DB_AMOUNT);
 	    
     /*
      *************************************************
-     * 1.ÃÖÁ¾°áÁ¦ ¿äÃ»(¼öÁ¤ÇÏÁö ¸¶¼¼¿ä) - END
+     * 1.ìµœì¢…ê²°ì œ ìš”ì²­(ìˆ˜ì •í•˜ì§€ ë§ˆì„¸ìš”) - END
      *************************************************
      */
 
     /*
-     * 2. ÃÖÁ¾°áÁ¦ ¿äÃ» °á°úÃ³¸®
+     * 2. ìµœì¢…ê²°ì œ ìš”ì²­ ê²°ê³¼ì²˜ë¦¬
      *
-     * ÃÖÁ¾ °áÁ¦¿äÃ» °á°ú ¸®ÅÏ ÆÄ¶ó¹ÌÅÍ´Â ¿¬µ¿¸Þ´º¾óÀ» Âü°íÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+     * ìµœì¢… ê²°ì œìš”ì²­ ê²°ê³¼ ë¦¬í„´ íŒŒë¼ë¯¸í„°ëŠ” ì—°ë™ë©”ë‰´ì–¼ì„ ì°¸ê³ í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.
      */
-	// (4) TX: lgdacom.conf¿¡ ¼³Á¤µÈ URL·Î ¼ÒÄÏ Åë½ÅÇÏ¿© ÃÖÁ¾ ÀÎÁõ¿äÃ», °á°ú°ªÀ¸·Î true, false ¸®ÅÏ
+	// (4) TX: lgdacom.confì— ì„¤ì •ëœ URLë¡œ ì†Œì¼“ í†µì‹ í•˜ì—¬ ìµœì¢… ì¸ì¦ìš”ì²­, ê²°ê³¼ê°’ìœ¼ë¡œ true, false ë¦¬í„´
     if ($xpay->TX()) {
-		//1)°áÁ¦°á°ú È­¸éÃ³¸®(¼º°ø,½ÇÆÐ °á°ú Ã³¸®¸¦ ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.)
+		//1)ê²°ì œê²°ê³¼ í™”ë©´ì²˜ë¦¬(ì„±ê³µ,ì‹¤íŒ¨ ê²°ê³¼ ì²˜ë¦¬ë¥¼ í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.)
 
 /*
-        echo "°áÁ¦¿äÃ»ÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.  <br>";
-        echo "TX Åë½Å ÀÀ´äÄÚµå = " . $xpay->Response_Code() . "<br>";		//Åë½Å ÀÀ´äÄÚµå("0000" ÀÏ ¶§ Åë½Å ¼º°ø)
-        echo "TX Åë½Å ÀÀ´ä¸Þ½ÃÁö = " . $xpay->Response_Msg() . "<p>";
+        echo "ê²°ì œìš”ì²­ì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.  <br>";
+        echo "TX í†µì‹  ì‘ë‹µì½”ë“œ = " . $xpay->Response_Code() . "<br>";		//í†µì‹  ì‘ë‹µì½”ë“œ("0000" ì¼ ë•Œ í†µì‹  ì„±ê³µ)
+        echo "TX í†µì‹  ì‘ë‹µë©”ì‹œì§€ = " . $xpay->Response_Msg() . "<p>";
             
-        echo "°Å·¡¹øÈ£ : " . $xpay->Response("LGD_TID",0) . "<br>";
-        echo "»óÁ¡¾ÆÀÌµð : " . $xpay->Response("LGD_MID",0) . "<br>";
-        echo "»óÁ¡ÁÖ¹®¹øÈ£ : " . $xpay->Response("LGD_OID",0) . "<br>";
-        echo "°áÁ¦±Ý¾× : " . $xpay->Response("LGD_AMOUNT",0) . "<br>";
-        echo "°á°úÄÚµå : " . $xpay->Response("LGD_RESPCODE",0) . "<br>";	//LGD_RESPCODE °¡ ¹Ýµå½Ã "0000" ÀÏ¶§¸¸ °áÁ¦ ¼º°ø, ±× ¿Ü´Â ¸ðµÎ ½ÇÆÐ
-        echo "°á°ú¸Þ¼¼Áö : " . $xpay->Response("LGD_RESPMSG",0) . "<p>";
+        echo "ê±°ëž˜ë²ˆí˜¸ : " . $xpay->Response("LGD_TID",0) . "<br>";
+        echo "ìƒì ì•„ì´ë”” : " . $xpay->Response("LGD_MID",0) . "<br>";
+        echo "ìƒì ì£¼ë¬¸ë²ˆí˜¸ : " . $xpay->Response("LGD_OID",0) . "<br>";
+        echo "ê²°ì œê¸ˆì•¡ : " . $xpay->Response("LGD_AMOUNT",0) . "<br>";
+        echo "ê²°ê³¼ì½”ë“œ : " . $xpay->Response("LGD_RESPCODE",0) . "<br>";	//LGD_RESPCODE ê°€ ë°˜ë“œì‹œ "0000" ì¼ë•Œë§Œ ê²°ì œ ì„±ê³µ, ê·¸ ì™¸ëŠ” ëª¨ë‘ ì‹¤íŒ¨
+        echo "ê²°ê³¼ë©”ì„¸ì§€ : " . $xpay->Response("LGD_RESPMSG",0) . "<p>";
 */         
         $keys = $xpay->Response_Names();
 /*
@@ -77,14 +77,14 @@
 		
         echo "<p>";
         
-		// (5) DB¿¡ ¿äÃ» °á°ú Ã³¸®
+		// (5) DBì— ìš”ì²­ ê²°ê³¼ ì²˜ë¦¬
         if( "0000" == $xpay->Response_Code() ) {
-			//Åë½Å»óÀÇ ¹®Á¦°¡ ¾øÀ»½Ã
-         	//ÃÖÁ¾°áÁ¦¿äÃ» °á°ú ¼º°ø DBÃ³¸®(LGD_RESPCODE °ª¿¡ µû¶ó °áÁ¦°¡ ¼º°øÀÎÁö, ½ÇÆÐÀÎÁö DBÃ³¸®)
-           	//echo "ÃÖÁ¾°áÁ¦¿äÃ» °á°ú ¼º°ø DBÃ³¸®ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.<br>";
+			//í†µì‹ ìƒì˜ ë¬¸ì œê°€ ì—†ì„ì‹œ
+         	//ìµœì¢…ê²°ì œìš”ì²­ ê²°ê³¼ ì„±ê³µ DBì²˜ë¦¬(LGD_RESPCODE ê°’ì— ë”°ë¼ ê²°ì œê°€ ì„±ê³µì¸ì§€, ì‹¤íŒ¨ì¸ì§€ DBì²˜ë¦¬)
+           	//echo "ìµœì¢…ê²°ì œìš”ì²­ ê²°ê³¼ ì„±ê³µ DBì²˜ë¦¬í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.<br>";
 
-            //ÃÖÁ¾°áÁ¦¿äÃ» °á°ú¸¦ DBÃ³¸®ÇÕ´Ï´Ù. (°áÁ¦¼º°ø ¶Ç´Â ½ÇÆÐ ¸ðµÎ DBÃ³¸® °¡´É)
-			//»óÁ¡³» DB¿¡ ¾î¶°ÇÑ ÀÌÀ¯·Î Ã³¸®¸¦ ÇÏÁö ¸øÇÑ°æ¿ì false·Î º¯°æÇØ ÁÖ¼¼¿ä.
+            //ìµœì¢…ê²°ì œìš”ì²­ ê²°ê³¼ë¥¼ DBì²˜ë¦¬í•©ë‹ˆë‹¤. (ê²°ì œì„±ê³µ ë˜ëŠ” ì‹¤íŒ¨ ëª¨ë‘ DBì²˜ë¦¬ ê°€ëŠ¥)
+			//ìƒì ë‚´ DBì— ì–´ë– í•œ ì´ìœ ë¡œ ì²˜ë¦¬ë¥¼ í•˜ì§€ ëª»í•œê²½ìš° falseë¡œ ë³€ê²½í•´ ì£¼ì„¸ìš”.
 			$isDBOK = true;
 
 			$userid = $_POST["userid"];
@@ -95,10 +95,10 @@
 
 /*
 			if (include('success3.php') == TRUE) {
-				echo "DB¼º°ø!!<br>";
+				echo "DBì„±ê³µ!!<br>";
 			}
 			else
-				echo "DB½ÇÆÐ ¤Ì¤Ì<br>";
+				echo "DBì‹¤íŒ¨ ã…œã…œ<br>";
 */
 			include 'success.php';
 			
@@ -107,29 +107,29 @@
 
           	if( !$isDBOK ) {
            		echo "<p>";
-           		$xpay->Rollback("»óÁ¡ DBÃ³¸® ½ÇÆÐ·Î ÀÎÇÏ¿© Rollback Ã³¸® [TID:" . $xpay->Response("LGD_TID",0) . ",MID:" . $xpay->Response("LGD_MID",0) . ",OID:" . $xpay->Response("LGD_OID",0) . "]");            		            		
+           		$xpay->Rollback("ìƒì  DBì²˜ë¦¬ ì‹¤íŒ¨ë¡œ ì¸í•˜ì—¬ Rollback ì²˜ë¦¬ [TID:" . $xpay->Response("LGD_TID",0) . ",MID:" . $xpay->Response("LGD_MID",0) . ",OID:" . $xpay->Response("LGD_OID",0) . "]");            		            		
 				
                 echo "TX Rollback Response_code = " . $xpay->Response_Code() . "<br>";
                 echo "TX Rollback Response_msg = " . $xpay->Response_Msg() . "<p>";
             		
                 if( "0000" == $xpay->Response_Code() ) {
-                  	echo "ÀÚµ¿Ãë¼Ò°¡ Á¤»óÀûÀ¸·Î ¿Ï·á µÇ¾ú½À´Ï´Ù.<br>";
+                  	echo "ìžë™ì·¨ì†Œê°€ ì •ìƒì ìœ¼ë¡œ ì™„ë£Œ ë˜ì—ˆìŠµë‹ˆë‹¤.<br>";
                 }else{
-          			echo "ÀÚµ¿Ãë¼Ò°¡ Á¤»óÀûÀ¸·Î Ã³¸®µÇÁö ¾Ê¾Ò½À´Ï´Ù.<br>";
+          			echo "ìžë™ì·¨ì†Œê°€ ì •ìƒì ìœ¼ë¡œ ì²˜ë¦¬ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.<br>";
                 }
           	}            	
         }else{
-          	//Åë½Å»óÀÇ ¹®Á¦ ¹ß»ý(ÃÖÁ¾°áÁ¦¿äÃ» °á°ú ½ÇÆÐ DBÃ³¸®)
-         	echo "ÃÖÁ¾°áÁ¦¿äÃ» °á°ú ½ÇÆÐ DBÃ³¸®ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.<br>";            	            
+          	//í†µì‹ ìƒì˜ ë¬¸ì œ ë°œìƒ(ìµœì¢…ê²°ì œìš”ì²­ ê²°ê³¼ ì‹¤íŒ¨ DBì²˜ë¦¬)
+         	echo "ìµœì¢…ê²°ì œìš”ì²­ ê²°ê³¼ ì‹¤íŒ¨ DBì²˜ë¦¬í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.<br>";            	            
         }
     }else {
-        //2)API ¿äÃ»½ÇÆÐ È­¸éÃ³¸®
-        echo "°áÁ¦¿äÃ»ÀÌ ½ÇÆÐÇÏ¿´½À´Ï´Ù.  <br>";
+        //2)API ìš”ì²­ì‹¤íŒ¨ í™”ë©´ì²˜ë¦¬
+        echo "ê²°ì œìš”ì²­ì´ ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.  <br>";
         echo "TX Response_code = " . $xpay->Response_Code() . "<br>";
         echo "TX Response_msg = " . $xpay->Response_Msg() . "<p>";
     
-        //ÃÖÁ¾°áÁ¦¿äÃ» °á°ú ½ÇÆÐ DBÃ³¸®
-        echo "ÃÖÁ¾°áÁ¦¿äÃ» °á°ú ½ÇÆÐ DBÃ³¸®ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.<br>";            	                        
+        //ìµœì¢…ê²°ì œìš”ì²­ ê²°ê³¼ ì‹¤íŒ¨ DBì²˜ë¦¬
+        echo "ìµœì¢…ê²°ì œìš”ì²­ ê²°ê³¼ ì‹¤íŒ¨ DBì²˜ë¦¬í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.<br>";            	                        
     }
 
 ?>
