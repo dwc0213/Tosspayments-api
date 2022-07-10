@@ -1,121 +1,13 @@
 <?
-	//ÄíÆù±İ¾×ÀÌ ÀÖ´Â °æ¿ì
-	if($cPrice){
-		$cnt = count($cnumber);
 
-		if($cnt == 0){
-			Msg::backMsg('Á¢±Ù¿À·ù');
-			exit;
-
-		}else{
-			$cAmt = 0;
-			$couponTxt = '';
-
-			for($i=0; $i<$cnt; $i++){
-				$coupon = $cnumber[$i];
-
-				if($coupon){
-					//ÄíÆù À¯È¿¼º°Ë»ç
-					$cChk = Util::CouponCheck($coupon,$dbconn);
-
-					if($cChk == ''){
-						Msg::backMsg('[$coupon] Àß¸øµÈ ÄíÆù¹øÈ£ÀÔ´Ï´Ù');
-						exit;
-
-					}elseif($cChk == 'used'){
-						Msg::backMsg('[$coupon] ÀÌ¹Ì »ç¿ëµÈ ÄíÆù¹øÈ£ÀÔ´Ï´Ù');
-						exit;
-
-					}elseif($cChk == 'end'){
-						Msg::backMsg('[$coupon] À¯È¿±â°£ÀÌ ¸¸·áµÈ ÄíÆù¹øÈ£ÀÔ´Ï´Ù');
-						exit;
-
-					}elseif($cChk > 0){
-						$cAmt += 1;
-
-						if($couponTxt)	$couponTxt .= ',';
-						$couponTxt .= $coupon;
-					}
-				}
-			}
-
-			$cChk = $cAmt * 79000;
-
-			//ÄíÆùÀû¿ë°¡
-			$amt -= $cChk;
-			$lg_amt = $amt;
-		}
-	}
-
-	$cart_num = explode(',',$cart_idx);
-	$clen = count($cart_num);
-
-	$errMsg = "";
-
-	//Áßº¹»óÇ° Àç°í¼ö Ã³¸®¿ë
-	$invenArr = Array();
-	$invenArrEA = Array();
-
-	//Àç°íÈ®ÀÎ
-	for($i=0; $i<$clen; $i++){
-		$cid = $cart_num[$i];
-		$cea = ${'ea'.$cid};
-
-		$sql = "select * from ks_cart where uid='$cid'";
-		$result = mysql_query($sql);
-		$row = mysql_fetch_array($result);
-		$pid = $row['pid'];
-		$pdateTime = $row['pdate'];
-		$gdata01 = $row['gdata01'];			//¿©¼ºÇÑº¹»çÀÌÁî
-		$bdata02 = $row['bdata02'];			//µ¹ÇÑº¹(³²¾Æ)
-		$cdata02 = $row['cdata02'];			//µ¹ÇÑº¹(¿©¾Æ)
-
-		//Àç°íÈ®ÀÎ(Çà»çÀÏ±âÁØ)
-		$invenID = $pid;					//»óÇ°UID
-		$invenTime = $pdateTime;		//Çà»çÀÏ
-		$invenEA = $cea;					//ÁÖ¹®¼ö·®
-
-		include '../module/invenChk.php';
-	}
-
-	if($errMsg){
-		$errMsg .= "\\nÀç°í°¡ ºÎÁ·ÇÕ´Ï´Ù";
-		Msg::backMsg($errMsg);
-		exit;
-	}
-
-
-
-
-	$reg_date = mktime();
-	$user_ip = $_SERVER['REMOTE_ADDR'];
-
-	if(!$userid)	$userid = 'ºñÈ¸¿ø';
-
-
-	if($ment){
-		$ment = eregi_replace("<", "&lt;", $ment);
-		$ment = eregi_replace(">", "&gt;", $ment);
-		$ment = eregi_replace("\"", "&quot;", $ment);
-		$ment = eregi_replace("\|", "&#124;", $ment);
-		$ment = eregi_replace("\r\n\r\n", "<P>", $ment);
-		$ment = eregi_replace("\r\n", "<BR>", $ment);
-	}
-
-
-
-
-	//ÁÖ¹®ÀÚ Á¤º¸¸¦ ÀúÀåÇÑ´Ù.
+	//ì£¼ë¬¸ì ì •ë³´ë¥¼ tmpì— ì €ì¥
 	$sql = "insert into ks_order_tmp (userid,oname,ozip1,ozip2,ozipcode,oaddr1,oaddr2,otel1,otel2,otel3,ohp1,ohp2,ohp3,oemail,pname,pzip1,pzip2,pzipcode,paddr1,paddr2,ptel1,ptel2,ptel3,php1,php2,php3,ment,paymode,account,result_price,ship_price,ship_mode,amt,saleTxt,sale_price,coupon_price,coupon,point,status,ip,reg_date) ";
-	$sql .= "values ('$userid','$oname','$ozip1','$ozip2','$ozipcode','$oaddr1','$oaddr2','$otel1','$otel2','$otel3','$ohp1','$ohp2','$ohp3','$oemail','$pname','$pzip1','$pzip2','$pzipcode','$paddr1','$paddr2','$ptel1','$ptel2','$ptel3','$php1','$php2','$php3','$ment','$pay_mode','$ac_name','$result_price','$ship_price','$ship_mode','$amt','$saleTxt','$sale_price','$cChk','$couponTxt','$uPrice','Á¢¼ö','$user_ip','$reg_date')";
+	$sql .= "values ('$userid','$oname','$ozip1','$ozip2','$ozipcode','$oaddr1','$oaddr2','$otel1','$otel2','$otel3','$ohp1','$ohp2','$ohp3','$oemail','$pname','$pzip1','$pzip2','$pzipcode','$paddr1','$paddr2','$ptel1','$ptel2','$ptel3','$php1','$php2','$php3','$ment','$pay_mode','$ac_name','$result_price','$ship_price','$ship_mode','$amt','$saleTxt','$sale_price','$cChk','$couponTxt','$uPrice','ì ‘ìˆ˜','$user_ip','$reg_date')";
 	$result = mysql_query($sql);
 
 
-
-
-
-	//ÁÖ¹®³»¿ªÀ» ÀúÀåÇÑ´Ù.
-	$id_list = explode(',',$cart_idx);		//Àå¹Ù±¸´ÏUID
+	//ì£¼ë¬¸ë‚´ì—­ì„ ì €ì¥.
+	$id_list = explode(',',$cart_idx);
 	$tot = count($id_list);
 
 	for($i=0; $i<$tot; $i++){
@@ -125,14 +17,14 @@
 		$result01 = mysql_query($sql01);
 		$row01 = mysql_fetch_array($result01);
 
-		$pid = $row01['pid'];					//Á¦Ç°UID
-		$pdate = $row01['pdate'];				//Çà»çÀÏ
-		$pea = ${'ea'.$uid};						//¼ö·®
-		$price01 = ${'p1'.$uid};				//»óÇ°°¡°İ
-		$price02 = ${'p2'.$uid};				//¿É¼Ç°¡
-		$price03 = ${'op'.$uid} * $pea;		//(»óÇ°°¡°İ+¿É¼Ç°¡) * ¼ö·®
+		$pid = $row01['pid'];					
+		$pdate = $row01['pdate'];				
+		$pea = ${'ea'.$uid};					
+		$price01 = ${'p1'.$uid};				
+		$price02 = ${'p2'.$uid};				
+		$price03 = ${'op'.$uid} * $pea;		
 
-		//¿©¼ºÇÑº¹
+		
 		$gdata01 = $row01['gdata01'];
 		$gdata02 = $row01['gdata02'];
 		$gdata03 = $row01['gdata03'];
@@ -142,49 +34,6 @@
 		$gdata07 = $row01['gdata07'];
 		$gdata08 = $row01['gdata08'];
 		$gdata09 = $row01['gdata09'];
-
-		//¿©¼ºÇÑº¹ > ÃÔ¿µÇÑº¹ ÁÖ¹®¿É¼Ç
-		$etc01 = $row01['etc01'];			//¾Æ¾ä
-		$etc02 = $row01['etc02'];			//ºñ³à
-		$etc03 = $row01['etc03'];			//¹î¾¾´ó±â
-		$etc04 = $row01['etc04'];			//³ë¸®°³
-
-		//³²¼ºÇÑº¹
-		$mdata01 = $row01['mdata01'];
-		$mdata02 = $row01['mdata02'];
-		$mdata03 = $row01['mdata03'];
-		$mdata04 = $row01['mdata04'];
-		$mdata05 = $row01['mdata05'];
-
-		//³²¾ÆÇÑº¹(´ë¿©)
-		$bdata01 = $row01['bdata01'];
-		$bdata02 = $row01['bdata02'];
-		$bdata03 = $row01['bdata03'];
-		$bdata04 = $row01['bdata04'];
-		$bdata05 = $row01['bdata05'];
-		$bdata06 = $row01['bdata06'];
-		$bdata07 = $row01['bdata07'];
-
-		//¿©¾ÆÇÑº¹(´ë¿©) ÁÖ¹®¿É¼Ç
-		$cdata01 = $row01['cdata01'];		//Å°,¸ö¹«°Ô
-		$cdata02 = $row01['cdata02'];		//»çÀÌÁî
-		$cdata03 = $row01['cdata03'];		//½Å¹ß
-		$cdata04 = $row01['cdata04'];		//¸ğÀÚ
-		$cdata05 = $row01['cdata05'];		//µ¹¶ì
-		$cdata06 = $row01['cdata06'];		//¹ö¼±
-		$cdata07 = $row01['cdata07'];		//Æ¯ÀÌ»çÇ×
-
-
-		//Á¦Ç°Á¤º¸
-		$sql02 = "select * from ks_product where uid='$pid'";
-		$result02 = mysql_query($sql02);
-		$row02 = mysql_fetch_array($result02);
-
-		$pcade01 = $row02['cade01'];
-		$pcade02 = $row02['cade02'];
-		$ptitle = $row02['title'];
-
-
 
 		$sql03 = "insert into ks_order_list_tmp (userid,code,pid,pcade01,pcade02,ptitle,pdate,pea,price01,price02,price03,gdata01,gdata02,gdata03,gdata04,gdata05,gdata06,gdata07,gdata08,gdata09,mdata01,mdata02,mdata03,mdata04,mdata05,bdata01,bdata02,bdata03,bdata04,bdata05,bdata06,bdata07,cdata01,cdata02,cdata03,cdata04,cdata05,cdata06,cdata07,etc01,etc02,etc03,etc04) values ('$userid','$reg_date','$pid','$pcade01','$pcade02','$ptitle','$pdate','$pea','$price01','$price02','$price03','$gdata01','$gdata02','$gdata03','$gdata04','$gdata05','$gdata06','$gdata07','$gdata08','$gdata09','$mdata01','$mdata02','$mdata03','$mdata04','$mdata05','$bdata01','$bdata02','$bdata03','$bdata04','$bdata05','$bdata06','$bdata07','$cdata01','$cdata02','$cdata03','$cdata04','$cdata05','$cdata06','$cdata07','$etc01','$etc02','$etc03','$etc04')";
 		$result03 = mysql_query($sql03);
