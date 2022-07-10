@@ -49,7 +49,7 @@
 
     $LGD_RETURNURL = "https://".$_SERVER['HTTP_HOST']."/module/toss_pc/returnurl.php";
 
-    $configPath = "/home/leehyunjoo/www/module/toss_pc/lgdacom"; //토스페이먼츠에서 제공한 환경파일("/conf/lgdacom.conf") 위치 지정.     
+    $configPath = "/home/www/module/toss_pc/lgdacom"; //토스페이먼츠에서 제공한 환경파일("/conf/lgdacom.conf") 위치 지정.     
 
     /*
      *************************************************
@@ -59,7 +59,7 @@
      *************************************************
      */
 
-    require_once("/home/leehyunjoo/www/module/toss_pc/lgdacom/XPayClient.php");
+    require_once("/home//www/module/toss_pc/lgdacom/XPayClient.php");
     $xpay = new XPayClient($configPath, $CST_PLATFORM);
     $xpay->Init_TX($LGD_MID);
     $LGD_TIMESTAMP = $xpay->GetTimeStamp(); 
