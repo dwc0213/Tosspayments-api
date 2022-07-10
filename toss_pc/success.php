@@ -22,19 +22,6 @@
 	$ohp3 = $row['ohp3'];
 	$oemail = $row['oemail'];
 
-	$pname = $row['pname'];
-	$pzip1 = $row['pzip1'];
-	$pzip2 = $row['pzip2'];
-	$pzipcode = $row['pzipcode'];
-	$paddr1 = $row['paddr1'];
-	$paddr2 = $row['paddr2'];
-	$ptel1 = $row['ptel1'];
-	$ptel2 = $row['ptel2'];
-	$ptel3 = $row['ptel3'];
-	$php1 = $row['php1'];
-	$php2 = $row['php2'];
-	$php3 = $row['php3'];
-
 	$ment = $row['ment'];
 	$paymode = $row['paymode'];
 	$result_price = $row['result_price'];
@@ -50,265 +37,28 @@
 	$ip = $row['ip'];
 
 
-	if($paymode == '¹«ÅëÀåÀÔ±İ')		$status = 'ÀÔ±İ´ë±â';
-	else										$status = '°áÁ¦¿Ï·á';
+	if($paymode == 'ë¬´í†µì¥ì…ê¸ˆ')		$status = 'ì…ê¸ˆëŒ€ê¸°';
+	else										$status = 'ê²°ì œì™„ë£Œ';
 
 
-
-
-	//ÄíÆù°Ë»ç
-	if($coupon){
-		$cArr = explode(',',$coupon);
-		$cnt = count($cArr);
-		for($i=0; $i<$cnt; $i++){
-			$cTxt = $cArr[$i];
-
-			//ÄíÆù À¯È¿¼º°Ë»ç
-			$cChk = Util::CouponCheck($cTxt,$dbconn);
-
-			if($cChk == 'used'){
-				$errMsg = 'ÀÌ¹Ì »ç¿ëµÈ ÄíÆù¹øÈ£ÀÔ´Ï´Ù';
-				$isDBOK = false;
-
-			}elseif($cChk == 'end'){
-				$errMsg = 'À¯È¿±â°£ÀÌ ¸¸·áµÈ ÄíÆù¹øÈ£ÀÔ´Ï´Ù';
-				$isDBOK = false;
-
-			}elseif($cChk == ''){
-				$errMsg = 'Àß¸øµÈ ÄíÆù¹øÈ£ÀÔ´Ï´Ù';
-				$isDBOK = false;
-			}
-		}
-	}
-
-
-	//Àç°íÈ®ÀÎ
-	if($isDBOK){
-		$errMsg = '';
-
-		$sql01 = "select * from ks_order_list_tmp where userid='$userid' and code='$reg_date' and pid>0 order by uid";
-		$result01 = mysql_query($sql01);
-		$num01 = mysql_num_rows($result01);
-
-		for($i=0; $i<$num01; $i++){
-			$row01 = mysql_fetch_array($result01);
-
-			$pid = $row01['pid'];
-			$pdateTime = $row01['pdate'];
-			$pea = $row01['pea'];
-			$gdata01 = $row01['gdata01'];			//¿©¼ºÇÑº¹»çÀÌÁî
-			$bdata02 = $row01['bdata02'];			//µ¹ÇÑº¹(³²¾Æ)
-			$cdata02 = $row01['cdata02'];			//µ¹ÇÑº¹(¿©¾Æ)
-
-			//Àç°íÈ®ÀÎ(Çà»çÀÏ±âÁØ)
-			$invenID = $pid;					//»óÇ°UID
-			$invenTime = $pdateTime;		//Çà»çÀÏ
-			$invenEA = $pea;					//ÁÖ¹®¼ö·®
-
-			include '../invenChk.php';
-		}
-
-		if($errMsg){
-			$errMsg .= "\\nÀç°í°¡ ºÎÁ·ÇÏ¿© °áÁ¦°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù";
-			$isDBOK = false;
-		}
-	}
-
-
+	
 
 	if($isDBOK){
 
-		//ÁÖ¹®ÀÚ Á¤º¸¸¦ ÀúÀåÇÑ´Ù.
+		//ì£¼ë¬¸ì ì •ë³´ë¥¼ ì €ì¥.
 		$sql = "insert into ks_order (userid,oname,ozip1,ozip2,ozipcode,oaddr1,oaddr2,otel1,otel2,otel3,ohp1,ohp2,ohp3,oemail,pname,pzip1,pzip2,pzipcode,paddr1,paddr2,ptel1,ptel2,ptel3,php1,php2,php3,ment,paymode,result_price,ship_price,ship_mode,amt,saleTxt,sale_price,coupon_price,coupon,point,status,ip,reg_date) ";
 		$sql .= "values ('$userid','$oname','$ozip1','$ozip2','$ozipcode','$oaddr1','$oaddr2','$otel1','$otel2','$otel3','$ohp1','$ohp2','$ohp3','$oemail','$pname','$pzip1','$pzip2','$pzipcode','$paddr1','$paddr2','$ptel1','$ptel2','$ptel3','$php1','$php2','$php3','$ment','$paymode','$result_price','$ship_price','$ship_mode','$amt','$saleTxt','$sale_price','$coupon_price','$coupon','$point','$status','$ip','$reg_date')";
 
 		$result = mysql_query($sql);
 
-
-
-
-		//Àû¸³±İÀ» »ç¿ëÇÑ °æ¿ì
-		if($point > 0){
-			//»ç¿ëÀÚ Àû¸³±İ »ç¿ë³»¿ªµî·Ï
-			$pmsg = '['.$reg_date.'] ÁÖ¹®»ç¿ë';
-			$sql = "insert into ks_point (userid,ptype,point,ment,reg_date) values ('$userid','U','$point','$pmsg','$reg_date')";
-			$result = mysql_query($sql);
-
-			//»ç¿ëÀÚ Àû¸³±İÂ÷°¨
-			$sql = "update tb_member set point = point - $point where userid='$userid'";
-			$result = mysql_query($sql);
-		}
-
-
-
-
-		//ÄíÆù»ç¿ëÃ³¸®
-		if($coupon){
-			$cArr = explode(',',$coupon);
-			$cnt = count($cArr);
-
-			for($i=0; $i<$cnt; $i++){
-				$coupon = $cArr[$i];
-				$cmsg = '['.$reg_date.'] ÁÖ¹®»ç¿ë';
-				$sql = "update ks_coupon_list set r_date='$reg_date', r_userid='$userid', r_name='$oname', ment='$cmsg' where coupon='$coupon'";
-				$result = mysql_query($sql);
-			}
-		}
-
-
-
-
-/* 20171228 Àû¸³±İ Àû¸³¾ÈÇÔ
-		//È¸¿øÀÏ °æ¿ì °áÁ¦±İ¾×ÀÇ 2%Àû¸³
-		if($userid && $userid != '_guest'){
-			$addPoint = round($amt * 0.02);
-
-			if($paymode == '¹«ÅëÀåÀÔ±İ')	{
-				//»ç¿ëÀÚ Àû¸³±İ »ç¿ë³»¿ª ÀÓ½Ãµî·Ï
-				$pmsg = '['.$reg_date.'] ÁÖ¹®Àû¸³';
-				$sql = "insert into ks_point_tmp (userid,ptype,point,ment,reg_date) values ('$userid','O','$addPoint','$pmsg','$reg_date')";
-				$result = mysql_query($sql);
-
-			}else{
-				//»ç¿ëÀÚ Àû¸³±İ »ç¿ë³»¿ªµî·Ï
-				$pmsg = '['.$reg_date.'] ÁÖ¹®Àû¸³';
-				$sql = "insert into ks_point (userid,ptype,point,ment,reg_date) values ('$userid','O','$addPoint','$pmsg','$reg_date')";
-				$result = mysql_query($sql);
-
-				//»ç¿ëÀÚ Àû¸³±İ Àû¸³
-				$sql = "update tb_member set point = point + $addPoint where userid='$userid'";
-				$result = mysql_query($sql);
-			}
-		}
-*/
-
-
-		//¸µÅ©ÇÁ¶óÀÌ½º¿ë
-		$ArrData = Array();
-
-		//ÁÖ¹®³»¿ªÀ» ÀúÀåÇÑ´Ù.
-		$sql01 = "select * from ks_order_list_tmp where userid='$userid' and code='$reg_date' order by uid";
-		$result01 = mysql_query($sql01);
-		$num01 = mysql_num_rows($result01);
-
-		for($i=0; $i<$num01; $i++){
-			$row01 = mysql_fetch_array($result01);
-
-			$pid = $row01['pid'];					//Á¦Ç°UID
-			$pcade01 = $row01['pcade01'];	//ºĞ·ù
-			$pcade02 = $row01['pcade02'];	//ºĞ·ù
-			$ptitle = $row01['ptitle'];				//Á¦Ç°¸í
-			$pdate = $row01['pdate'];				//Çà»çÀÏ
-			$pea = $row01['pea'];					//¼ö·®
-			$price01 = $row01['price01'];		//»óÇ°°¡°İ
-			$price02 = $row01['price02'];		//¿É¼Ç°¡
-			$price03 = $row01['price03'];		//(»óÇ°°¡°İ+¿É¼Ç°¡) * ¼ö·®
-
-			//¿©¼ºÇÑº¹
-			$gdata01 = $row01['gdata01'];
-			$gdata02 = $row01['gdata02'];
-			$gdata03 = $row01['gdata03'];
-			$gdata04 = $row01['gdata04'];
-			$gdata05 = $row01['gdata05'];
-			$gdata06 = $row01['gdata06'];
-			$gdata07 = $row01['gdata07'];
-			$gdata08 = $row01['gdata08'];
-			$gdata09 = $row01['gdata09'];
-
-			//¿©¼ºÇÑº¹ > ÃÔ¿µÇÑº¹ ÁÖ¹®¿É¼Ç
-			$etc01 = $row01['etc01'];			//¾Æ¾ä
-			$etc02 = $row01['etc02'];			//ºñ³à
-			$etc03 = $row01['etc03'];			//¹î¾¾´ó±â
-			$etc04 = $row01['etc04'];			//³ë¸®°³
-
-			//³²¼ºÇÑº¹
-			$mdata01 = $row01['mdata01'];
-			$mdata02 = $row01['mdata02'];
-			$mdata03 = $row01['mdata03'];
-			$mdata04 = $row01['mdata04'];
-			$mdata05 = $row01['mdata05'];
-
-			//³²¾ÆÇÑº¹(´ë¿©)
-			$bdata01 = $row01['bdata01'];
-			$bdata02 = $row01['bdata02'];
-			$bdata03 = $row01['bdata03'];
-			$bdata04 = $row01['bdata04'];
-			$bdata05 = $row01['bdata05'];
-			$bdata06 = $row01['bdata06'];
-			$bdata07 = $row01['bdata07'];
-
-			//¿©¾ÆÇÑº¹(´ë¿©)
-			$cdata01 = $row01['cdata01'];
-			$cdata02 = $row01['cdata02'];
-			$cdata03 = $row01['cdata03'];
-			$cdata04 = $row01['cdata04'];
-			$cdata05 = $row01['cdata05'];
-			$cdata06 = $row01['cdata06'];
-			$cdata07 = $row01['cdata07'];
-
-
-			$sql02 = "insert into ks_order_list (userid,code,pid,pcade01,pcade02,ptitle,pdate,pea,price01,price02,price03,gdata01,gdata02,gdata03,gdata04,gdata05,gdata06,gdata07,gdata08,gdata09,mdata01,mdata02,mdata03,mdata04,mdata05,bdata01,bdata02,bdata03,bdata04,bdata05,bdata06,bdata07,cdata01,cdata02,cdata03,cdata04,cdata05,cdata06,cdata07,etc01,etc02,etc03,etc04) values ('$userid','$reg_date','$pid','$pcade01','$pcade02','$ptitle','$pdate','$pea','$price01','$price02','$price03','$gdata01','$gdata02','$gdata03','$gdata04','$gdata05','$gdata06','$gdata07','$gdata08','$gdata09','$mdata01','$mdata02','$mdata03','$mdata04','$mdata05','$bdata01','$bdata02','$bdata03','$bdata04','$bdata05','$bdata06','$bdata07','$cdata01','$cdata02','$cdata03','$cdata04','$cdata05','$cdata06','$cdata07','$etc01','$etc02','$etc03','$etc04')";
-			$result02 = mysql_query($sql02);
-
-
-			//¸µÅ©ÇÁ¶óÀÌ½º º¯¼ö¼³Á¤
-			if($pcade01 == '¿©¼ºÇÑº¹')				$category_code = '001';
-			elseif($pcade01 == '³²¼ºÇÑº¹')			$category_code = '002';
-			elseif($pcade01 == 'Ä¿ÇÃÇÑº¹')			$category_code = '003';
-			elseif($pcade01 == '¿©¾ÆÇÑº¹')			$category_code = '004';
-			elseif($pcade01 == '³²¾ÆÇÑº¹')			$category_code = '005';
-			elseif($pcade01 == 'Àå½Å±¸')				$category_code = '006';
-			elseif($pcade01 == 'ÅĞ¹èÀÚ(Á¶³¢)')		$category_code = '007';
-			elseif($pcade01 == '¿©¾ÆÇÑº¹(ÆÇ¸Å)')	$category_code = '008';
-			elseif($pcade01 == '³²¾ÆÇÑº¹(ÆÇ¸Å)')	$category_code = '009';
-			elseif($pcade01 == 'Àå½Å±¸(ÆÇ¸Å)')		$category_code = '010';
-			else												$category_code = '000';
-
-			$ArrData[$i]['product_id'] = $pid;
-			$ArrData[$i]['product_name'] = iconv('euc-kr','utf-8',$ptitle);
-			$ArrData[$i]['category_code'] = $category_code;
-			$ArrData[$i]['category_name'] = iconv('euc-kr','utf-8',$pcade01);
-			$ArrData[$i]['quantity'] = $pea;
-			$ArrData[$i]['product_final_price'] = $price03;
-		}
-
-
-		//ÀÓ½ÃÀúÀå Å×ÀÌºíÀ» »èÁ¦ÇÑ´Ù
-		$sql = "delete from ks_order_tmp where userid='$userid' and reg_date='$reg_date'";
-	//	$result = mysql_query($sql);
-
-		$sql = "delete from ks_order_list_tmp where userid='$userid' and code='$reg_date'";
-	//	$result = mysql_query($sql);
-
-
-
-
-		//¸µÅ©ÇÁ¶óÀÌ½º
-		if(isset($_COOKIE["LPINFO"])){
-			include 'linkprice.request.php';
-		}
-
-
-
-		//°áÁ¦³»¿ªÈ®ÀÎÆäÀÌÁö
+		//ê²°ì œë‚´ì—­í™•ì¸í˜ì´ì§€
 		$sql = "select * from ks_order where reg_date='$reg_date' order by uid desc limit 1";
 		$result = mysql_query($sql);
 		$row = mysql_fetch_array($result);
 
 		$uid = $row['uid'];
 
-
-
-
-		//¹®ÀÚ¹ß¼Û
-		mysql_close($dbconn);
-		unset($db);
-		unset($dbconn);
-
-		$SMS_ADMIN = 'leehyunjoo';
-		$SMS_TYPE = 'order';
-
-		//sms µ¥ÀÌÅÍº£ÀÌ½º Á¢¼Ó
+		//sms ë°ì´í„°ë² ì´ìŠ¤ ì ‘ì†
 		include '../../module/class/class.DbConSmsHub.php';
 		include '../../module/SmsHub.php';
 ?>
@@ -321,12 +71,9 @@
 
 
 <script language='javascript'>
-alert('°áÁ¦°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.');
+alert('ê²°ì œê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.');
 document.frm_lgu.submit();
 </script>
-
-
-
 
 <?
 	}
