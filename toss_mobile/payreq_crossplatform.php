@@ -3,63 +3,62 @@
 	session_start();
 
     /*
-     * [°áÁ¦ ÀÎÁõ¿äÃ» ÆäÀÌÁö(STEP2-1)]
+     * [ê²°ì œ ì¸ì¦ìš”ì²­ íŽ˜ì´ì§€(STEP2-1)]
      *
-     * »ùÇÃÆäÀÌÁö¿¡¼­´Â ±âº» ÆÄ¶ó¹ÌÅÍ¸¸ ¿¹½ÃµÇ¾î ÀÖÀ¸¸ç, º°µµ·Î ÇÊ¿äÇÏ½Å ÆÄ¶ó¹ÌÅÍ´Â ¿¬µ¿¸Þ´º¾óÀ» Âü°íÇÏ½Ã¾î Ãß°¡ ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.     
+     * ìƒ˜í”ŒíŽ˜ì´ì§€ì—ì„œëŠ” ê¸°ë³¸ íŒŒë¼ë¯¸í„°ë§Œ ì˜ˆì‹œë˜ì–´ ìžˆìœ¼ë©°, ë³„ë„ë¡œ í•„ìš”í•˜ì‹  íŒŒë¼ë¯¸í„°ëŠ” ì—°ë™ë©”ë‰´ì–¼ì„ ì°¸ê³ í•˜ì‹œì–´ ì¶”ê°€ í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.     
      */
 
     /*
-     * 1. ±âº»°áÁ¦ ÀÎÁõ¿äÃ» Á¤º¸ º¯°æ
+     * 1. ê¸°ë³¸ê²°ì œ ì¸ì¦ìš”ì²­ ì •ë³´ ë³€ê²½
      * 
-     * ±âº»Á¤º¸¸¦ º¯°æÇÏ¿© ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.(ÆÄ¶ó¹ÌÅÍ Àü´Þ½Ã POST¸¦ »ç¿ëÇÏ¼¼¿ä)
+     * ê¸°ë³¸ì •ë³´ë¥¼ ë³€ê²½í•˜ì—¬ ì£¼ì‹œê¸° ë°”ëžë‹ˆë‹¤.(íŒŒë¼ë¯¸í„° ì „ë‹¬ì‹œ POSTë¥¼ ì‚¬ìš©í•˜ì„¸ìš”)
      */
 
-	$CST_MID                    = 'ssez2020';					//»óÁ¡¾ÆÀÌµð(Åä½ºÆäÀÌ¸ÕÃ÷À¸·Î ºÎÅÍ ¹ß±Þ¹ÞÀ¸½Å »óÁ¡¾ÆÀÌµð¸¦ ÀÔ·ÂÇÏ¼¼¿ä)
-    $CST_PLATFORM               = 'service';				//Åä½ºÆäÀÌ¸ÕÃ÷ °áÁ¦ ¼­ºñ½º ¼±ÅÃ(test:Å×½ºÆ®, service:¼­ºñ½º)
-                                                                        //Å×½ºÆ® ¾ÆÀÌµð´Â 't'¸¦ ¹Ýµå½Ã Á¦¿ÜÇÏ°í ÀÔ·ÂÇÏ¼¼¿ä.
-	$LGD_BUYER                  = $_POST['oname'];	//±¸¸ÅÀÚ¸í
-	$LGD_PRODUCTINFO            = 'È²ÈÄ³ªºñ';			//»óÇ°¸í
-	$LGD_AMOUNT                 = $_POST['amt'];					//°áÁ¦±Ý¾×("," ¸¦ Á¦¿ÜÇÑ °áÁ¦±Ý¾×À» ÀÔ·ÂÇÏ¼¼¿ä)
-	$LGD_BUYEREMAIL             = $_POST['oemail'];				//±¸¸ÅÀÚ ÀÌ¸ÞÀÏ
-	$LGD_OID                    = mktime();			//ÁÖ¹®¹øÈ£(»óÁ¡Á¤ÀÇ À¯´ÏÅ©ÇÑ ÁÖ¹®¹øÈ£¸¦ ÀÔ·ÂÇÏ¼¼¿ä)
-	$LGD_TIMESTAMP			= date('YmsHis');
-	if($pay_mode == '½Å¿ëÄ«µå')			$LGD_CUSTOM_FIRSTPAY = 'SC0010'; //µðÆúÆ® °áÁ¦¼ö´Ü (ÇØ´ç ÇÊµå¸¦ º¸³»Áö ¾ÊÀ¸¸é °áÁ¦¼ö´Ü ¼±ÅÃ UI °¡ ³ëÃâµË´Ï´Ù.)
-	elseif($pay_mode == '°èÁÂÀÌÃ¼')		$LGD_CUSTOM_FIRSTPAY = 'SC0030';
-	elseif($pay_mode == '¹«ÅëÀåÀÔ±Ý')	$LGD_CUSTOM_FIRSTPAY = 'SC0040';
-	$LGD_PCVIEWYN	= $_POST["LGD_PCVIEWYN"];//ÈÞ´ëÆù¹øÈ£ ÀÔ·Â È­¸é »ç¿ë ¿©ºÎ(À¯½ÉÄ¨ÀÌ ¾ø´Â ´Ü¸»±â ÀÔ·Â-->À¯½ÉÄ¨ÀÌ ÀÖ´Â ÈÞ´ëÆù¿¡¼­ ½ÇÁ¦ °áÁ¦)
-	$LGD_CUSTOM_SKIN            = "SMART_XPAY2";    //»óÁ¡Á¤ÀÇ °áÁ¦Ã¢ ½ºÅ²
-	$LGD_CUSTOM_PROCESSTYPE     = "TWOTR";                                       //¼öÁ¤ºÒ°¡
-	$LGD_OSTYPE_CHECK           = "M";
-    $LGD_MID                    = (("test" == $CST_PLATFORM)?"t":"").$CST_MID;  //»óÁ¡¾ÆÀÌµð(ÀÚµ¿»ý¼º)
-	$LGD_MERTKEY						=	"93200ff88799726d42cee4e94b4a4589";
-    $LGD_BUYERID					= $_POST['LGD_BUYERID'];		//±¸¸ÅÀÚ ¾ÆÀÌµð
-
+     $CST_MID                    = 'ìƒì ì•„ì´ë””';		//ìƒì ì•„ì´ë””(í† ìŠ¤íŽ˜ì´ë¨¼ì¸ ìœ¼ë¡œ ë¶€í„° ë°œê¸‰ë°›ìœ¼ì‹  ìƒì ì•„ì´ë””ë¥¼ ìž…ë ¥í•˜ì„¸ìš”)
+     $CST_PLATFORM               = 'service';		    //í† ìŠ¤íŽ˜ì´ë¨¼ì¸  ê²°ì œ ì„œë¹„ìŠ¤ ì„ íƒ(test:í…ŒìŠ¤íŠ¸, service:ì„œë¹„ìŠ¤)
+                                                            //í…ŒìŠ¤íŠ¸ ì•„ì´ë””ëŠ” 't'ë¥¼ ë°˜ë“œì‹œ ì œì™¸í•˜ê³  ìž…ë ¥í•˜ì„¸ìš”.
+     $LGD_BUYER                  = $_POST['oname'];	    //êµ¬ë§¤ìžëª…
+     $LGD_PRODUCTINFO            = 'ìƒí’ˆëª…';		 //ìƒí’ˆëª…
+     $LGD_AMOUNT                 = $_POST['amt'];	   //ê²°ì œê¸ˆì•¡("," ë¥¼ ì œì™¸í•œ ê²°ì œê¸ˆì•¡ì„ ìž…ë ¥í•˜ì„¸ìš”)
+     $LGD_BUYEREMAIL             = $_POST['oemail'];	   //êµ¬ë§¤ìž ì´ë©”ì¼
+     $LGD_OID                    = mktime();		   //ì£¼ë¬¸ë²ˆí˜¸(ìƒì ì •ì˜ ìœ ë‹ˆí¬í•œ ì£¼ë¬¸ë²ˆí˜¸ë¥¼ ìž…ë ¥í•˜ì„¸ìš”)
+     $LGD_TIMESTAMP		 = date('YmsHis');
+     if($pay_mode == 'ì‹ ìš©ì¹´ë“œ')		 $LGD_CUSTOM_FIRSTPAY = 'SC0010'; //ë””í´íŠ¸ ê²°ì œìˆ˜ë‹¨ (í•´ë‹¹ í•„ë“œë¥¼ ë³´ë‚´ì§€ ì•Šìœ¼ë©´ ê²°ì œìˆ˜ë‹¨ ì„ íƒ UI ê°€ ë…¸ì¶œë©ë‹ˆë‹¤.)
+     elseif($pay_mode == 'ê³„ì¢Œì´ì²´')	 $LGD_CUSTOM_FIRSTPAY = 'SC0030';
+     elseif($pay_mode == 'ë¬´í†µìž¥ìž…ê¸ˆ')       $LGD_CUSTOM_FIRSTPAY = 'SC0040';
+     $LGD_PCVIEWYN = $_POST["LGD_PCVIEWYN"];//íœ´ëŒ€í°ë²ˆí˜¸ ìž…ë ¥ í™”ë©´ ì‚¬ìš© ì—¬ë¶€(ìœ ì‹¬ì¹©ì´ ì—†ëŠ” ë‹¨ë§ê¸° ìž…ë ¥-->ìœ ì‹¬ì¹©ì´ ìžˆëŠ” íœ´ëŒ€í°ì—ì„œ ì‹¤ì œ ê²°ì œ)
+     $LGD_CUSTOM_SKIN            = "SMART_XPAY2";	//ìƒì ì •ì˜ ê²°ì œì°½ ìŠ¤í‚¨
+     $LGD_CUSTOM_PROCESSTYPE     = "TWOTR";             //ìˆ˜ì •ë¶ˆê°€
+     $LGD_OSTYPE_CHECK           = "M";
+     $LGD_MID                    = (("test" == $CST_PLATFORM)?"t":"").$CST_MID;  //ìƒì ì•„ì´ë””(ìžë™ìƒì„±)
+     $LGD_MERTKEY		 = "93200ff88799726d42cee4e94b4a4589";
+     $LGD_BUYERID		 = $_POST['LGD_BUYERID'];		//êµ¬ë§¤ìž ì•„ì´ë””
 
     /*
-     * °¡»ó°èÁÂ(¹«ÅëÀå) °áÁ¦ ¿¬µ¿À» ÇÏ½Ã´Â °æ¿ì ¾Æ·¡ LGD_CASNOTEURL À» ¼³Á¤ÇÏ¿© ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù. 
+     * ê°€ìƒê³„ì¢Œ(ë¬´í†µìž¥) ê²°ì œ ì—°ë™ì„ í•˜ì‹œëŠ” ê²½ìš° ì•„ëž˜ LGD_CASNOTEURL ì„ ì„¤ì •í•˜ì—¬ ì£¼ì‹œê¸° ë°”ëžë‹ˆë‹¤. 
      */
 	 
-    $LGD_CASNOTEURL				= "https://".$_SERVER['HTTP_HOST']."/module/toss_mobile/cas_noteurl.php";    
+    $LGD_CASNOTEURL = "https://".$_SERVER['HTTP_HOST']."/module/toss_mobile/cas_noteurl.php";    
 
     /*
-     * LGD_RETURNURL À» ¼³Á¤ÇÏ¿© ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù. ¹Ýµå½Ã ÇöÀç ÆäÀÌÁö¿Í µ¿ÀÏÇÑ ÇÁ·ÎÆ®ÄÝ ¹×  È£½ºÆ®ÀÌ¾î¾ß ÇÕ´Ï´Ù. ¾Æ·¡ ºÎºÐÀ» ¹Ýµå½Ã ¼öÁ¤ÇÏ½Ê½Ã¿ä.
+     * LGD_RETURNURL ì„ ì„¤ì •í•˜ì—¬ ì£¼ì‹œê¸° ë°”ëžë‹ˆë‹¤. ë°˜ë“œì‹œ í˜„ìž¬ íŽ˜ì´ì§€ì™€ ë™ì¼í•œ í”„ë¡œíŠ¸ì½œ ë°  í˜¸ìŠ¤íŠ¸ì´ì–´ì•¼ í•©ë‹ˆë‹¤. ì•„ëž˜ ë¶€ë¶„ì„ ë°˜ë“œì‹œ ìˆ˜ì •í•˜ì‹­ì‹œìš”.
      */
 	 
-    $LGD_RETURNURL				= "https://".$_SERVER['HTTP_HOST']."/module/toss_mobile/returnurl.php";  
+    $LGD_RETURNURL = "https://".$_SERVER['HTTP_HOST']."/module/toss_mobile/returnurl.php";  
 
-	$configPath 	= "/home/leehyunjoo/www/module/toss_mobile/lgdacom"; 	//Åä½ºÆäÀÌ¸ÕÃ÷¿¡¼­ Á¦°øÇÑ È¯°æÆÄÀÏ("/conf/lgdacom.conf") À§Ä¡ ÁöÁ¤.
+	$configPath = "/home/www/module/toss_mobile/lgdacom"; 	//í† ìŠ¤íŽ˜ì´ë¨¼ì¸ ì—ì„œ ì œê³µí•œ í™˜ê²½íŒŒì¼("/conf/lgdacom.conf") ìœ„ì¹˜ ì§€ì •.
 	
 	/*
-	* ISP Ä«µå°áÁ¦ ¿¬µ¿À» À§ÇÑ ÆÄ¶ó¹ÌÅÍ(ÇÊ¼ö)
+	* ISP ì¹´ë“œê²°ì œ ì—°ë™ì„ ìœ„í•œ íŒŒë¼ë¯¸í„°(í•„ìˆ˜)
 	*/
 
 	$LGD_KVPMISPWAPURL		= "";
 	$LGD_KVPMISPCANCELURL   = "";
 	
-	$LGD_MPILOTTEAPPCARDWAPURL = ""; //iOS ¿¬µ¿½Ã ÇÊ¼ö
+	$LGD_MPILOTTEAPPCARDWAPURL = ""; //iOS ì—°ë™ì‹œ í•„ìˆ˜
 	
 	/*
-	* °èÁÂÀÌÃ¼ ¿¬µ¿À» À§ÇÑ ÆÄ¶ó¹ÌÅÍ(ÇÊ¼ö)
+	* ê³„ì¢Œì´ì²´ ì—°ë™ì„ ìœ„í•œ íŒŒë¼ë¯¸í„°(í•„ìˆ˜)
 	*/
 
 	$LGD_MTRANSFERWAPURL 		= "";
@@ -68,13 +67,13 @@
     
     /*
      *************************************************
-     * 2. MD5 ÇØ½¬¾ÏÈ£È­ (¼öÁ¤ÇÏÁö ¸¶¼¼¿ä) - BEGIN
+     * 2. MD5 í•´ì‰¬ì•”í˜¸í™” (ìˆ˜ì •í•˜ì§€ ë§ˆì„¸ìš”) - BEGIN
      * 
-     * MD5 ÇØ½¬¾ÏÈ£È­´Â °Å·¡ À§º¯Á¶¸¦ ¸·±âÀ§ÇÑ ¹æ¹ýÀÔ´Ï´Ù. 
+     * MD5 í•´ì‰¬ì•”í˜¸í™”ëŠ” ê±°ëž˜ ìœ„ë³€ì¡°ë¥¼ ë§‰ê¸°ìœ„í•œ ë°©ë²•ìž…ë‹ˆë‹¤. 
      *************************************************
      */
 
-    require_once("/home/leehyunjoo/www/module/toss_mobile/lgdacom/XPayClient.php");
+    require_once("/home/www/module/toss_mobile/lgdacom/XPayClient.php");
     $xpay = new XPayClient($configPath, $CST_PLATFORM);
    	$xpay->Init_TX($LGD_MID);
 	$LGD_TIMESTAMP = $xpay->GetTimeStamp(); 
@@ -84,23 +83,23 @@
 
     /*
      *************************************************
-     * 2. MD5 ÇØ½¬¾ÏÈ£È­ (¼öÁ¤ÇÏÁö ¸¶¼¼¿ä) - END
+     * 2. MD5 í•´ì‰¬ì•”í˜¸í™” (ìˆ˜ì •í•˜ì§€ ë§ˆì„¸ìš”) - END
      *************************************************
      */
-    $CST_WINDOW_TYPE = "submit";							// ¼öÁ¤ºÒ°¡
-    $LGD_CUSTOM_SWITCHINGTYPE = "SUBMIT";					// ½Å¿ëÄ«µå Ä«µå»ç ÀÎÁõ ÆäÀÌÁö ¿¬µ¿ ¹æ½Ä
+    $CST_WINDOW_TYPE = "submit";							// ìˆ˜ì •ë¶ˆê°€
+    $LGD_CUSTOM_SWITCHINGTYPE = "SUBMIT";					// ì‹ ìš©ì¹´ë“œ ì¹´ë“œì‚¬ ì¸ì¦ íŽ˜ì´ì§€ ì—°ë™ ë°©ì‹
 
 		
 	/*
 	****************************************************
-	* ¸ð¹ÙÀÏ OSº° ISP(±¹¹Î/ºñ¾¾), °èÁÂÀÌÃ¼ °áÁ¦ ±¸ºÐ °ª
+	* ëª¨ë°”ì¼ OSë³„ ISP(êµ­ë¯¼/ë¹„ì”¨), ê³„ì¢Œì´ì²´ ê²°ì œ êµ¬ë¶„ ê°’
 	****************************************************
-	- ¾Èµå·ÎÀÌµå: A (µðÆúÆ®)
+	- ì•ˆë“œë¡œì´ë“œ: A (ë””í´íŠ¸)
 	- iOS: N
-	- iOSÀÏ °æ¿ì, ¹Ýµå½Ã NÀ¸·Î °ªÀ» ¼öÁ¤
+	- iOSì¼ ê²½ìš°, ë°˜ë“œì‹œ Nìœ¼ë¡œ ê°’ì„ ìˆ˜ì •
 	*/
-	$LGD_KVPMISPAUTOAPPYN	= "A";		// ½Å¿ëÄ«µå °áÁ¦ 
-	$LGD_MTRANSFERAUTOAPPYN = "A";		// °èÁÂÀÌÃ¼ °áÁ¦
+	$LGD_KVPMISPAUTOAPPYN	= "A";		// ì‹ ìš©ì¹´ë“œ ê²°ì œ 
+	$LGD_MTRANSFERAUTOAPPYN = "A";		// ê³„ì¢Œì´ì²´ ê²°ì œ
 
     
 ?>
@@ -110,7 +109,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
 
-<title>Åä½ºÆäÀÌ¸ÕÃ÷ eCredit¼­ºñ½º °áÁ¦Å×½ºÆ®</title>
+<title>í† ìŠ¤íŽ˜ì´ë¨¼ì¸  eCreditì„œë¹„ìŠ¤ ê²°ì œí…ŒìŠ¤íŠ¸</title>
 <!-- test 
 <script language="javascript" src="https://pretest.tosspayments.com:9443/xpay/js/xpay_crossplatform.js" type="text/javascript"></script>
 -->
@@ -125,7 +124,7 @@
 	var LGD_window_type = '<?= $CST_WINDOW_TYPE ?>'; 
 
 /*
-* ¼öÁ¤ºÒ°¡
+* ìˆ˜ì •ë¶ˆê°€
 */
 
 function launchCrossPlatform(){
@@ -133,7 +132,7 @@ function launchCrossPlatform(){
 }
 
 /*
-* FORM ¸í¸¸  ¼öÁ¤ °¡´É
+* FORM ëª…ë§Œ  ìˆ˜ì • ê°€ëŠ¥
 */
 
 function getFormObject() {
@@ -146,34 +145,34 @@ function getFormObject() {
 <form method="post" name="LGD_PAYINFO" id="LGD_PAYINFO" action="payres.php">
 <table style='display:none;'>
     <tr>
-        <td>±¸¸ÅÀÚ ÀÌ¸§ </td>
+        <td>êµ¬ë§¤ìž ì´ë¦„ </td>
         <td><?= $LGD_BUYER ?></td>
     </tr>
     <tr>
-        <td>»óÇ°Á¤º¸ </td>
+        <td>ìƒí’ˆì •ë³´ </td>
         <td><?= $LGD_PRODUCTINFO ?></td>
     </tr>
     <tr>
-        <td>°áÁ¦±Ý¾× </td>
+        <td>ê²°ì œê¸ˆì•¡ </td>
         <td><?= $LGD_AMOUNT ?></td>
     </tr>
     <tr>
-        <td>±¸¸ÅÀÚ ÀÌ¸ÞÀÏ </td>
+        <td>êµ¬ë§¤ìž ì´ë©”ì¼ </td>
         <td><?= $LGD_BUYEREMAIL ?></td>
     </tr>
     <tr>
-        <td>ÁÖ¹®¹øÈ£ </td>
+        <td>ì£¼ë¬¸ë²ˆí˜¸ </td>
         <td><?= $LGD_OID ?></td>
     </tr>
     <tr>
-        <td colspan="2">* Ãß°¡ »ó¼¼ °áÁ¦¿äÃ» ÆÄ¶ó¹ÌÅÍ´Â ¸Þ´º¾óÀ» ÂüÁ¶ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.</td>
+        <td colspan="2">* ì¶”ê°€ ìƒì„¸ ê²°ì œìš”ì²­ íŒŒë¼ë¯¸í„°ëŠ” ë©”ë‰´ì–¼ì„ ì°¸ì¡°í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.</td>
     </tr>
     <tr>
         <td colspan="2"></td>
     </tr>    
     <tr>
         <td colspan="2">
-		<input type="button" value="ÀÎÁõ¿äÃ»" onclick="launchCrossPlatform();"/>         
+		<input type="button" value="ì¸ì¦ìš”ì²­" onclick="launchCrossPlatform();"/>         
         </td>
     </tr>    
 </table>
@@ -205,24 +204,24 @@ function getFormObject() {
 <input type="hidden" id="LGD_BUYERID"			name="LGD_BUYERID"				value="<?=$userid ?>"/>
 
 <!--
-°áÁ¦¿äÃ»½Ã ¡°LGD_RETURN_MERT_CUSTOM_PARAM¡± = ¡°Y¡±ÀÏ °æ¿ì »ç¿ëÀÚÁ¤ÀÇ °ªÀÌ retunurl ·Î ±×´ë·Î ¸®ÅÏ
-*ÁÖÀÇ»çÇ×
-»ç¿ëÀÚÁ¤ÀÇ ÆÄ¶ó¹ÌÅÍ´Â LGD_ ·Î ½ÃÀÛµÉ ¼ö ¾øÀ½.
+ê²°ì œìš”ì²­ì‹œ â€œLGD_RETURN_MERT_CUSTOM_PARAMâ€ = â€œYâ€ì¼ ê²½ìš° ì‚¬ìš©ìžì •ì˜ ê°’ì´ retunurl ë¡œ ê·¸ëŒ€ë¡œ ë¦¬í„´
+*ì£¼ì˜ì‚¬í•­
+ì‚¬ìš©ìžì •ì˜ íŒŒë¼ë¯¸í„°ëŠ” LGD_ ë¡œ ì‹œìž‘ë  ìˆ˜ ì—†ìŒ.
 
-<input type="hidden" id="LGD_RETURN_MERT_CUSTOM_PARAM"	name="LGD_RETURN_MERT_CUSTOM_PARAM"	value="Y¡± />
-<input type="hidden" id="CUSTOM_PARAMETER1"	name="CUSTOM_PARAMETER1"	value="»óÁ¡Á¤ÀÇ ÆÄ¶ó¹ÌÅÍ °ª 1¹øÀÔ´Ï´Ù" />
-<input type="hidden" id="CUSTOM_PARAMETER2"	name="CUSTOM_PARAMETER2"	value="»óÁ¡Á¤ÀÇ ÆÄ¶ó¹ÌÅÍ °ª 2¹øÀÔ´Ï´Ù¡± />
+<input type="hidden" id="LGD_RETURN_MERT_CUSTOM_PARAM"	name="LGD_RETURN_MERT_CUSTOM_PARAM"	value="Yâ€ />
+<input type="hidden" id="CUSTOM_PARAMETER1"	name="CUSTOM_PARAMETER1"	value="ìƒì ì •ì˜ íŒŒë¼ë¯¸í„° ê°’ 1ë²ˆìž…ë‹ˆë‹¤" />
+<input type="hidden" id="CUSTOM_PARAMETER2"	name="CUSTOM_PARAMETER2"	value="ìƒì ì •ì˜ íŒŒë¼ë¯¸í„° ê°’ 2ë²ˆìž…ë‹ˆë‹¤â€ />
 -->
 
-<!-- ISP(±¹¹Î/BC)°áÁ¦¿¡¸¸ Àû¿ë -->
+<!-- ISP(êµ­ë¯¼/BC)ê²°ì œì—ë§Œ ì ìš© -->
 <input type="hidden" id="LGD_KVPMISPWAPURL"			name="LGD_KVPMISPWAPURL"			value="<?=$LGD_KVPMISPWAPURL ?>"/>
 <input type="hidden" id="LGD_KVPMISPCANCELURL"		name="LGD_KVPMISPCANCELURL"			value="<?=$LGD_KVPMISPCANCELURL ?>"/>
 
-<!-- °èÁÂÀÌÃ¼ °áÁ¦¿¡¸¸ Àû¿ë -->
+<!-- ê³„ì¢Œì´ì²´ ê²°ì œì—ë§Œ ì ìš© -->
 <input type="hidden" id="LGD_MTRANSFERWAPURL"		name="LGD_MTRANSFERWAPURL"			value="<?=$LGD_MTRANSFERWAPURL ?>"/>
 <input type="hidden" id="LGD_MTRANSFERCANCELURL"	name="LGD_MTRANSFERCANCELURL"		value="<?=$LGD_MTRANSFERCANCELURL ?>"/>
 
-<!-- ¸ð¹ÙÀÏ OSº° ISP(±¹¹Î/BC)°áÁ¦/°èÁÂÀÌÃ¼ °áÁ¦ ±¸ºÐ -->
+<!-- ëª¨ë°”ì¼ OSë³„ ISP(êµ­ë¯¼/BC)ê²°ì œ/ê³„ì¢Œì´ì²´ ê²°ì œ êµ¬ë¶„ -->
 <input type="hidden" id="LGD_KVPMISPAUTOAPPYN"		name="LGD_KVPMISPAUTOAPPYN"			value="<?=$LGD_KVPMISPAUTOAPPYN ?>"/>
 <input type="hidden" id="LGD_MTRANSFERAUTOAPPYN"	name="LGD_MTRANSFERAUTOAPPYN"		value="<?=$LGD_MTRANSFERAUTOAPPYN ?>"/>
 
